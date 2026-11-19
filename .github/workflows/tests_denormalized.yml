@@ -8,16 +8,16 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: setup python
       run: |
-        pip3 install -r requirements.txt
+        pip3 install -r requirements.txt --break-system-packages
     - name: docker
       run: |
         git submodule init
         git submodule update
-        docker-compose up -d --build
+        docker compose up -d --build
         docker ps -a
-        sleep 20
+        sleep 60
         sh load_tweets.sh
-        docker-compose exec -T pg_denormalized ./run_tests.sh
+        docker compose exec -T pg_denormalized ./run_tests.sh
